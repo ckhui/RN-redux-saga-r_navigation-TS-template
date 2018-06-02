@@ -3,7 +3,7 @@ import React from 'react';
 import  { Component }  from 'react';
 import {Button, StyleSheet, Text, View} from 'react-native';
 
-export interface Props {
+interface Props {
   name: string;
   enthusiasmLevel?: number;
 }

@@ -12,50 +12,56 @@ import {
   Text,
   View
 } from 'react-native';
-import { Hello } from './hello';
+import { BackHandler, AsyncStorage } from 'react-native';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+import MainStackNavigator from './config/router';
+import store from './config/store';
+import { Provider } from 'react-redux';
+import { NavigationState, NavigationDispatch } from 'react-navigation';
+import {
+  createNavigationPropConstructor,       // handles #1 above
+  initializeListeners,                   // handles #4 above
+  ReducerState,
+} from 'react-navigation-redux-helpers';
+import { connect } from 'react-redux';
+import { ApplicationState } from './store/types';
+import { ConnectedReduxProps } from './store/reducers/helper';
 
-type Props = {};
-export default class App extends Component<Props> {
+const navigationPropConstructor = createNavigationPropConstructor('root');
+
+interface Props {
+}
+
+class App extends React.Component<Props & ReduxProps> {
+  componentDidMount() {
+    initializeListeners('root', this.props.nav);
+  }
+
   render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit App.js
-        </Text>
-        <Text style={styles.instructions}>
-          {instructions}
-        </Text>
-        <Hello name={'123'}></Hello>
-      </View>
+    const navigation = navigationPropConstructor(
+      this.props.dispatch,
+      this.props.nav,
     );
+    return <MainStackNavigator navigation={navigation} />;
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+interface ReduxProps {
+  nav: NavigationState;
+  dispatch: NavigationDispatch;
+}
+
+const mapStateToProps = (state: ApplicationState) => ({
+  nav: state.nav,
 });
+const AppWithNavigationState = connect(mapStateToProps)(App);
+
+export default class Root extends Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <AppWithNavigationState />
+      </Provider>
+    );
+  }
+}

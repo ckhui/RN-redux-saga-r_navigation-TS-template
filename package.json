@@ -3,19 +3,35 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "watch": "tsc -w",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
     "start:ios": "react-native run-ios --simulator=\"iPhone X\"",
-    "lint-fix": "tslint app/**/*.ts --fix"
+    "start:android": "react-native run-android",
+    "lint-fix": "tslint app/**/*.tsx --fix",
+    "reset:modules": "rm -rf node_modules api/node_modules infrastructure/node_modules core/node_modules native/node_modules && yarn"
   },
   "dependencies": {
+    "@types/prop-types": "^15.5.3",
+    "@types/react-navigation": "^2.0.0",
+    "@types/redux-logger": "^3.0.6",
+    "prop-types": "^15.6.1",
     "react": "16.3.1",
-    "react-native": "0.55.4"
+    "react-native": "0.55.4",
+    "react-native-extended-stylesheet": "^0.8.1",
+    "react-navigation": "^2.0.0-rc.1",
+    "react-navigation-redux-helpers": "^1.1.2",
+    "react-redux": "^5.0.7",
+    "redux": "^4.0.0",
+    "redux-logger": "^3.0.6",
+    "redux-saga": "^0.16.0"
   },
   "devDependencies": {
     "@types/jest": "^22.2.3",
-    "@types/react": "^16.3.14",
+    "@types/react": "^16.3.16",
+    "@types/react-dom": "^16.0.5",
     "@types/react-native": "^0.55.16",
+    "@types/react-redux": "^6.0.0",
     "@types/react-test-renderer": "^16.0.1",
     "babel-jest": "23.0.0",
     "babel-preset-react-native": "4.0.0",
